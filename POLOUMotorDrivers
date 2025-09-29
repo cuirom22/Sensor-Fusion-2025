@@ -1,0 +1,49 @@
+#include <Arduino.h>
+// Motor 1
+#define PWM1 25
+#define DIR1 26
+
+// Motor 2
+#define PWM2 27
+#define DIR2 14
+
+void setup() {
+  // Motor driver pins
+  pinMode(DIR1, OUTPUT);
+  pinMode(DIR2, OUTPUT);
+
+  // Setup PWM channels
+  ledcSetup(0, 20000, 8);  // channel 0, 20kHz, 8-bit
+  ledcSetup(1, 20000, 8);  // channel 1, 20kHz, 8-bit
+
+  // Attach pins to channels
+  ledcAttachPin(PWM1, 0);
+  ledcAttachPin(PWM2, 1);
+
+  Serial.begin(115200);
+}
+
+void loop() {
+  // Forward, both motors, 50% speed
+  delay(5000);
+  digitalWrite(DIR1, HIGH);
+  digitalWrite(DIR2, HIGH);
+  ledcWrite(0, 128);   // Motor1 PWM duty
+  ledcWrite(1, 128);   // Motor2 PWM duty
+
+  delay(2000);
+
+  // Reverse, both motors, 50% speed
+  digitalWrite(DIR1, LOW);
+  digitalWrite(DIR2, LOW);
+  ledcWrite(0, 128);
+  ledcWrite(1, 128);
+
+  delay(2000);
+
+  // Stop
+  ledcWrite(0, 0);
+  ledcWrite(1, 0);
+
+  delay(2000);
+}
